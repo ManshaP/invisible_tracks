@@ -6,7 +6,7 @@ Code to track ship trajectories from AIS data, advect them with ERA5 winds using
 Below are examples of which keywords the python scripts expect to run the analysis for the month of 01/2016. 
 In order to run it, maps of emission locations are needed as well as a HYSPLIT installation, meteorological (e.g. ERA5) data, as well as MODIS cloud product data. The filepaths that need replacing on a different system are listed for each python script.  
 
-`python 0_modis_list.py 1 2016`
+`python 0_modis_list.py 1 2016`\
 files in: MODIS files: `/neodc/modis/data/MOD06_L2/collection61/`\
 files out: MODIS that overlaps with Region of Interest\
 filepath0: `/home/users/pete_nut/IV_shiptracks/modis_tiles/atlantic_modis_swaths_intersect_{}_{}.pkl`
