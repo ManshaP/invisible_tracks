@@ -1,7 +1,6 @@
 # invisible_tracks
 
 Code to track ship trajectories from AIS data, advect them with ERA5 winds using HYSPLIT, and collocate them to MODIS satellite data.
-Licence: CC BY-NC-SA
 
 ## Data set production
 Below are examples of which keywords the python scripts expect to run the analysis for the month of 01/2016. 
