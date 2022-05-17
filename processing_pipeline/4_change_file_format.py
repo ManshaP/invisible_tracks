@@ -1,3 +1,17 @@
+# Name: Post-processing the data
+#
+# Description: Python code adding derived data fields and summarising the outputs
+#
+# Inputs: collocated trajectories and cloud properties
+#
+# Output: trajectories and cloud properties monthly, aqua and terra, with added droplet number concentration, EIS, boolean masks for the regions of interest 
+# 
+# Modes: normal, null experiment
+#
+# Libraries: numpy, xarray, pandas, calendar, datetime
+#-------------------------------------------------------------------------------------------
+
+
 from __future__ import division, unicode_literals, print_function  # for compatibility with Python 2 and 3
 # import numba
 import glob
@@ -53,7 +67,8 @@ def subsume_month(month):
         print(month, day)
         try:
             new = pd.read_hdf(filename.format(year,month, day), key='df')
-            new = new.dropna(how='all', subset=['CTT','CTT_1', 'CTT_3'])
+            # drop some pure nan lines from the files
+            new = new.dropna(how='all', subset=['LWP','LWP_1', 'LWP_3'])
             new['terra']=0
             new.overpass=pd.to_datetime(new.overpass)
             interp_EIS = EIS.interp(time=xr.DataArray(new.overpass, dims='obs'), longitude=xr.DataArray(new.longitude, dims='obs'), latitude=xr.DataArray(new.latitude, dims='obs'))
@@ -66,7 +81,7 @@ def subsume_month(month):
 
         try:
             new = pd.read_hdf(filename_terra.format(year,month, day), key='df')
-            new = new.dropna(how='all', subset=['CTT','CTT_1', 'CTT_3'])
+            new = new.dropna(how='all', subset=['LWP','LWP_1', 'LWP_3'])
             new['terra']=1
             new.overpass=pd.to_datetime(new.overpass)
             interp_EIS = EIS.interp(time=xr.DataArray(new.overpass, dims='obs'), longitude=xr.DataArray(new.longitude, dims='obs'), latitude=xr.DataArray(new.latitude, dims='obs'))
@@ -78,13 +93,16 @@ def subsume_month(month):
     h5['ocean'] = np.logical_not(globe.is_land(h5.latitude.values, h5.longitude.values)) & np.logical_not(globe.is_land(h5.latitude.values+1, h5.longitude.values)) & np.logical_not(globe.is_land(h5.latitude.values, h5.longitude.values+1)) & np.logical_not(globe.is_land(h5.latitude.values-1, h5.longitude.values)) & np.logical_not(globe.is_land(h5.latitude.values, h5.longitude.values-1)) 
     h5=h5.set_index(pd.to_datetime(h5.index.values.astype("datetime64[ns]")))
     h5.overpass=pd.to_datetime(h5.overpass)
+    # add Nd calculated from COT and effective radius
     h5['Nd'] = (1.37e-5 * (h5.r_eff * 1e-6)**(-5/2)*h5.COT**(1/2) / 1e6)
     h5['Nd_1'] = (1.37e-5 * (h5.r_eff_1 * 1e-6)**(-5/2)* h5.COT_1 **(1/2) / 1e6)
     h5['Nd_3'] = (1.37e-5 * (h5.r_eff_3 * 1e-6)**(-5/2)* h5.COT_3 **(1/2) / 1e6)
+    #  add markers for the regions of interest
     h5['chil'] = condi(h5, [[-30., -17.],[ -82.5,-72.5]])
     h5['azor'] = condi(h5,[[30, 50],[ -40,-10]])
     h5['cver'] = condi(h5,[[10., 30.],[ -50,-20]])
     h5['ango'] = condi(h5,[[-30., -10.],[ -10.,15.]])
+    # add the difference between emission time and satellite overpass (how long the emissions have been advected for)
     h5['hours_diff']=pd.to_timedelta((h5.overpass-h5.index).values).seconds//3600
     
     print('writing')

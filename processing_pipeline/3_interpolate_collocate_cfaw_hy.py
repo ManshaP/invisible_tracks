@@ -1,3 +1,17 @@
+# Name: Collocate the advected trajectories with MODIS satellite data
+#
+# Description: Python code using the cis library to construct the trajectory at the time of the satellite overpass and collocate to the satellite imagery
+#
+# Inputs: advected emissions of the last 24h, MODIS data
+#
+# Output: collocated trajectories and cloud properties
+#
+# Modes: normal/null experiment, Aqua/Terra
+# 
+# Libraries: numpy, cis, xarray, pandas, pickle, calendar, datetime
+#-------------------------------------------------------------------------------------------
+
+
 from __future__ import division, unicode_literals, print_function  # for compatibility with Python 2 and 3
 import numba
 import numpy as np
@@ -10,7 +24,6 @@ import pims
 import pickle
 import trackpy as tp
 import xarray as xr
-# from get_reanalysis import get_profile_data, get_uv_data
 from cis.data_io.ungridded_data import UngriddedDataList
 import os
 os.environ['CIS_PLUGIN_HOME'] = '/home/users/pete_nut/plugins/'

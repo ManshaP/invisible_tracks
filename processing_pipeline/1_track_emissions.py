@@ -1,3 +1,15 @@
+# Name: Track Emissions from Gridded Dataset
+#
+# Description: python code using the trackpy library to convert 1-hourly gridmaps of emissions into ship trajectories
+#
+# Inputs:
+# emissions maps
+#
+# Output: trajectory csv
+#
+# Libraries: numpy, numba, xarray, pandas, trackpy, calendar
+#-------------------------------------------------------------------------------------------
+
 from __future__ import division, unicode_literals, print_function  # for compatibility with Python 2 and 3
 import numba
 import sys

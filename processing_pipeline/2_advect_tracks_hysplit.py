@@ -238,8 +238,8 @@ def hysplit_traj(latInit, lonInit, jday):#, overpass_time):
     os.system('mkdir -p '+outpath)
     path_hysplit_code = '/home/users/pete_nut/hysplit.v5.0.0_CentOS/'
     metpath = '/gws/nopw/j04/eo_shared_data_vol1/reanalysis/ARL_noaa/reanalysis_data/ERA5/'
-    setupFile = '/home/users/pete_nut/IV_shiptracks/matt_traj_code/SETUP_traj_lowcloud_15min.CFG'
-    ASCFile  = '/home/users/pete_nut/IV_shiptracks/matt_traj_code/ASCDATA_JASMIN.CFG'
+    setupFile = '/home/users/pete_nut/IV_shiptracks/traj_code/SETUP_traj_lowcloud_15min.CFG'
+    ASCFile  = '/home/users/pete_nut/IV_shiptracks/traj_code/ASCDATA_JASMIN.CFG'
 
     year   = str( jday.year  ).zfill(4)
     month  = str( jday.month ).zfill(2)
